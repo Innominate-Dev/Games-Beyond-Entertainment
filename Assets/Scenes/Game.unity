@@ -489,6 +489,8 @@ MonoBehaviour:
   jumpCoolDown: 0.25
   airMultiplier: 0.4
   gravity: -19.81
+  crouching: 0
+  crouchYScale: 0.5
   walkBobSpeed: 14
   walkBobAmount: 0.05
   sprintBobSpeed: 18
@@ -497,6 +499,7 @@ MonoBehaviour:
   crouchBobAmount: 0.25
   jumpKey: 32
   sprintKey: 304
+  crouchKey: 306
   playerHeight: 2
   WhatIsGround:
     serializedVersion: 2

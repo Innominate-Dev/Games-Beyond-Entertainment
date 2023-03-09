@@ -23,6 +23,11 @@ public class PlayerController : MonoBehaviour
     public float gravity = -9.81f;
     bool readyToJump = true;
 
+    [Header("Crouching")]
+    public bool crouching = false;
+    public float crouchYScale;
+    private float startYScale;
+
     [Header("HeadBob Parameter")]
     [SerializeField] private float walkBobSpeed = 14f;
     [SerializeField] private float walkBobAmount = 0.05f;
@@ -38,6 +43,7 @@ public class PlayerController : MonoBehaviour
     [Header("Keybinds")]
     public KeyCode jumpKey = KeyCode.Space;
     public KeyCode sprintKey = KeyCode.LeftShift;
+    public KeyCode crouchKey = KeyCode.LeftControl;
 
 
     [Header("Ground Check")]
@@ -72,6 +78,7 @@ public class PlayerController : MonoBehaviour
     {
         walking,
         sprinting,
+        crouching,
         air
     }
 
@@ -84,6 +91,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         //playerCamera = GetComponent<Camera>();
         rb.freezeRotation = true;
+        startYScale = Player.transform.localScale.y;
     }
 
     // Update is called once per frame
@@ -136,11 +144,25 @@ public class PlayerController : MonoBehaviour
 
             Invoke(nameof(ResetJump), jumpCoolDown); // Calls the function Reset Jump and calls the variable JumpCoolDown.
         }
+
+        if(Input.GetKeyDown(crouchKey) && crouching == false && isGrounded == true)
+        {
+            transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
+            crouching = true;
+        }
+        else if(Input.GetKeyDown(crouchKey) && crouching == true && isGrounded == true)
+        {
+            transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
+            crouching = false;
+        }
     }
 
     private void StateHandler()
     {
-
+        if(Input.GetKeyDown(crouchKey))
+        {
+            state = MovementState.crouching;
+        }
 
         // MODE - SPRINTING
         if (isGrounded && Input.GetKey(sprintKey))
@@ -246,5 +268,6 @@ public class PlayerController : MonoBehaviour
         }
 
     }
+
 
 }
