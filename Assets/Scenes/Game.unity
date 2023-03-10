@@ -483,13 +483,14 @@ MonoBehaviour:
   moveSpeed: 7
   walkSpeed: 7
   sprintSpeed: 10
+  crouchSpeed: 3.5
   groundDrag: 5
   playerHealth: 100
   jumpForce: 10
   jumpCoolDown: 0.25
   airMultiplier: 0.4
   gravity: -19.81
-  crouching: 0
+  isCrouching: 0
   crouchYScale: 0.5
   walkBobSpeed: 14
   walkBobAmount: 0.05

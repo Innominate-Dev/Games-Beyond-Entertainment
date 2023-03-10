@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed; //////////////// GENERAL SPEED FOR PLAYER ////////////////////
     public float walkSpeed;
     public float sprintSpeed;
+    public float crouchSpeed;
 
     public float groundDrag;
     public float playerHealth;
@@ -24,7 +25,7 @@ public class PlayerController : MonoBehaviour
     bool readyToJump = true;
 
     [Header("Crouching")]
-    public bool crouching = false;
+    public bool isCrouching = false;
     public float crouchYScale;
     private float startYScale;
 
@@ -145,32 +146,30 @@ public class PlayerController : MonoBehaviour
             Invoke(nameof(ResetJump), jumpCoolDown); // Calls the function Reset Jump and calls the variable JumpCoolDown.
         }
 
-        if(Input.GetKeyDown(crouchKey) && crouching == false && isGrounded == true)
+        if(Input.GetKeyDown(crouchKey) && isCrouching == false && isGrounded == true)
         {
             transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
-            crouching = true;
+            isCrouching = true;
+            rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
+
         }
-        else if(Input.GetKeyDown(crouchKey) && crouching == true && isGrounded == true)
+        else if(Input.GetKeyDown(crouchKey) && isCrouching == true && isGrounded == true)
         {
             transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
-            crouching = false;
+            isCrouching = false;
+            state = MovementState.crouching;
+            moveSpeed = walkSpeed;
         }
     }
 
     private void StateHandler()
     {
-        if(Input.GetKeyDown(crouchKey))
-        {
-            state = MovementState.crouching;
-        }
-
         // MODE - SPRINTING
-        if (isGrounded && Input.GetKey(sprintKey))
+        if (isGrounded && Input.GetKey(sprintKey) && isCrouching == false)
         {
             state = MovementState.sprinting;
             moveSpeed = sprintSpeed;
             IsSprinting = true;
-
         }
         else if (isGrounded)
         {
@@ -180,13 +179,22 @@ public class PlayerController : MonoBehaviour
         }
         else if (!isGrounded)
         {
-            state = MovementState.air;
-            
-
+            state = MovementState.air; 
         }
         else
         {
             IsSprinting = false;
+        }
+
+        if (isCrouching == true)
+        {
+            state = MovementState.crouching;
+            moveSpeed = crouchSpeed;
+        }
+        else
+        {
+            state = MovementState.walking;
+            moveSpeed = walkSpeed;
         }
 
     }
@@ -256,7 +264,7 @@ public class PlayerController : MonoBehaviour
 
         if (Mathf.Abs(moveDirection.x) > 0.1f || Mathf.Abs(moveDirection.z) > 0.1f && isGrounded)
         {
-            timer += Time.deltaTime * (IsSprinting ? sprintBobSpeed : walkBobSpeed);
+            timer += Time.deltaTime * (isCrouching ? crouchBobSpeed : IsSprinting ? sprintBobSpeed : walkBobSpeed);
             if (IsSprinting == true && state != MovementState.air)
             {
                 playerCamera.transform.localPosition = new Vector3(playerCamera.transform.localPosition.x, DefaultYPOS + Mathf.Sin(timer) * (sprintBobAmount), playerCamera.transform.localPosition.z);
@@ -264,6 +272,10 @@ public class PlayerController : MonoBehaviour
             if(state == MovementState.walking)
             {
                 playerCamera.transform.localPosition = new Vector3(playerCamera.transform.localPosition.x, DefaultYPOS + Mathf.Sin(timer) * (walkBobAmount), playerCamera.transform.localPosition.z);
+            }
+            if (state == MovementState.crouching)
+            {
+                playerCamera.transform.localPosition = new Vector3(playerCamera.transform.localPosition.x, DefaultYPOS + Mathf.Sin(timer) * (crouchBobAmount), playerCamera.transform.localPosition.z);
             }
         }
 
