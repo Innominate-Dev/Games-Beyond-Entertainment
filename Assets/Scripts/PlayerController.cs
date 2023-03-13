@@ -24,6 +24,16 @@ public class PlayerController : MonoBehaviour
     public float gravity = -9.81f;
     bool readyToJump = true;
 
+    [Header("Sliding")]
+    public float slideTimer;
+    public float maxSlideTimer;
+    public float slideSpeed;
+
+    bool firstSprintButton = false;
+    float timeOfFirstButton;
+    bool reset = false;
+    bool isSliding = false;
+
     [Header("Crouching")]
     public bool isCrouching = false;
     public float crouchYScale;
@@ -80,7 +90,8 @@ public class PlayerController : MonoBehaviour
         walking,
         sprinting,
         crouching,
-        air
+        air,
+        sliding
     }
 
 
@@ -104,6 +115,7 @@ public class PlayerController : MonoBehaviour
         PlayerInput(); /////////// THIS IS TO CONSTANTLY CHECK ON THE PLAYER IF THEY PRESS DOWN A MOVEMENT KEY AND It is called every frame
         SpeedControl();
         StateHandler();
+        Sliding();
 
         moveDirection.y = gravity * Time.deltaTime;
 
@@ -126,6 +138,10 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate() //// THIS METHOD IS BEING USED FOR THE PHYSICS CALCULATIONS SINCE FIXEDUPDATE CAN RUN SEVERAL TIMES In one frame.
     {
         MovePlayer();
+        if(isSliding == true)
+        {
+            SlideMovement();
+        }
     }
 
     /////////////// PLAYER INPUT METHOD ///////////////////////
@@ -170,33 +186,99 @@ public class PlayerController : MonoBehaviour
             state = MovementState.sprinting;
             moveSpeed = sprintSpeed;
             IsSprinting = true;
+            isSliding = false;
+        }
+        else if (isCrouching == true && isSliding == false)
+        {
+            state = MovementState.crouching;
+            moveSpeed = crouchSpeed;
+            isSliding = false;
+        }
+        else if(isSliding == true)
+        {
+            state = MovementState.sliding;
         }
         else if (isGrounded)
         {
+
             state = MovementState.walking;
             moveSpeed = walkSpeed;
+            isSliding = false;
 
         }
         else if (!isGrounded)
         {
-            state = MovementState.air; 
+            state = MovementState.air;
+            isSliding = false;
         }
         else
         {
             IsSprinting = false;
+            isSliding = false;
         }
 
-        if (isCrouching == true)
+    }
+
+    /////////// SLIDING MECHANIC /////////////
+   
+    private void Sliding()
+    {
+
+        
+        if (Input.GetKeyDown(crouchKey) && firstSprintButton)
         {
-            state = MovementState.crouching;
-            moveSpeed = crouchSpeed;
-        }
-        else
-        {
-            state = MovementState.walking;
-            moveSpeed = walkSpeed;
+            if (Time.time - timeOfFirstButton < 0.75f)
+            {
+                Debug.Log("DoubleClicked");
+                isSliding = true;
+            }
+            else
+            {
+                Debug.Log("Too late");
+                isSliding = false;
+            }
+
+            reset = true;
         }
 
+        if (Input.GetKeyDown(sprintKey) && !firstSprintButton)
+        {
+            firstSprintButton = true;
+            timeOfFirstButton = Time.time;
+        }
+
+        if (reset)
+        {
+            firstSprintButton = false;
+            reset = false;
+        }
+        if(rb.velocity.magnitude == 0)
+        {
+            reset = true;
+            isSliding = false;
+            Debug.Log("Reset");
+        }
+
+    }
+
+    private void SlideMovement()
+    {
+        Vector3 inputDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
+
+        rb.AddForce(inputDirection.normalized * slideSpeed, ForceMode.Force);
+
+        slideTimer -= Time.deltaTime;
+
+        if(slideTimer <= 0)
+        {
+            StopSliding();
+        }
+    }
+
+    private void StopSliding()
+    {
+        isSliding = false;
+        slideTimer = maxSlideTimer;
     }
 
     private void MovePlayer()
@@ -215,6 +297,8 @@ public class PlayerController : MonoBehaviour
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force); // IF THE PLAYER IS IN THE AIR AND NOT TOUCHING THE GROUND
         }
     }
+
+    /////////////// Speed of player ////////////
 
     private void SpeedControl()
     {
@@ -239,6 +323,8 @@ public class PlayerController : MonoBehaviour
         readyToJump = true;
     }
 
+    ///////// HEALTH SYSTEM //////////
+
     private void Health(int damage)
     {
         playerHealth -= damage;
@@ -259,27 +345,28 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    /////////////// HEAD BOB ///////////////
+
     private void HandleHeadbob()
     {
 
         if (Mathf.Abs(moveDirection.x) > 0.1f || Mathf.Abs(moveDirection.z) > 0.1f && isGrounded)
         {
             timer += Time.deltaTime * (isCrouching ? crouchBobSpeed : IsSprinting ? sprintBobSpeed : walkBobSpeed);
-            if (IsSprinting == true && state != MovementState.air)
+            if (IsSprinting == true && state != MovementState.air && state != MovementState.sliding)
             {
                 playerCamera.transform.localPosition = new Vector3(playerCamera.transform.localPosition.x, DefaultYPOS + Mathf.Sin(timer) * (sprintBobAmount), playerCamera.transform.localPosition.z);
             }
-            if(state == MovementState.walking)
+            if(state == MovementState.walking && state != MovementState.sliding)
             {
                 playerCamera.transform.localPosition = new Vector3(playerCamera.transform.localPosition.x, DefaultYPOS + Mathf.Sin(timer) * (walkBobAmount), playerCamera.transform.localPosition.z);
             }
-            if (state == MovementState.crouching)
+            if (state == MovementState.crouching && state != MovementState.sliding)
             {
                 playerCamera.transform.localPosition = new Vector3(playerCamera.transform.localPosition.x, DefaultYPOS + Mathf.Sin(timer) * (crouchBobAmount), playerCamera.transform.localPosition.z);
             }
         }
 
-    }
-
+    }   
 
 }
