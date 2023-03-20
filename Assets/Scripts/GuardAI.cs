@@ -46,8 +46,8 @@ public class GuardAI : MonoBehaviour
     private void Update()
     {
         //Check for sight and attack range
-        playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
-        playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
+        //playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
+        //playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
 
         if (!playerInSightRange && !playerInAttackRange)
         {
@@ -62,6 +62,23 @@ public class GuardAI : MonoBehaviour
             AttackPlayer();
         }
     }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if(other.tag == "Player")
+        {
+            playerInAttackRange = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if(other.tag == "Player")
+        {
+            playerInAttackRange = false;
+        }
+    }
+
 
     private void Patrolling()
     {
@@ -117,10 +134,6 @@ public class GuardAI : MonoBehaviour
             // Rigidbody rb = Instantiate(bullets, transform.position, Quaternion.identity).GetComponent<Rigidbody>();
             //rb.AddForce(transform.forward * 32f, ForceMode.Impulse);
             //rb.AddForce(transform.up * 32f, ForceMode.Impulse);
-
-            GameObject bulletObject = Instantiate(bullets);
-            bulletObject.transform.position = barrel.transform.position + transform.forward;
-            bulletObject.transform.forward = barrel.transform.forward; /// Gun shooting from the barrel
 
             alreadyAttacked = true;
             Invoke(nameof(ResetAttack), timeBetweenAttacks);
