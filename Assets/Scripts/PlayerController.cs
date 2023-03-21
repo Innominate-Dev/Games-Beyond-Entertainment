@@ -78,6 +78,7 @@ public class PlayerController : MonoBehaviour
 
     public TextMeshProUGUI health;
 
+
     /////////////////// MOVEMENT STATE ///////////////////
 
     bool IsSprinting = false;
@@ -367,6 +368,32 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-    }   
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "GuardAttack")
+        {
+            other.transform.parent.GetComponent<GuardAI>().playerInAttackRange = true;
+        }
+        if (other.tag == "GuardSight")
+        {
+            other.transform.parent.GetComponent<GuardAI>().playerInSightRange = true;
+        }
+
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "GuardAttack")
+        {
+            other.transform.parent.GetComponent<GuardAI>().playerInAttackRange = false;
+        }
+        if (other.tag == "GuardSight")
+        {
+            other.transform.parent.GetComponent<GuardAI>().playerInSightRange = false;
+        }
+    }
+
 
 }

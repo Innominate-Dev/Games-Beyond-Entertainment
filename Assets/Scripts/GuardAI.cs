@@ -63,23 +63,6 @@ public class GuardAI : MonoBehaviour
         }
     }
 
-    void OnTriggerEnter(Collider other)
-    {
-        if(other.tag == "Player")
-        {
-            playerInAttackRange = true;
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if(other.tag == "Player")
-        {
-            playerInAttackRange = false;
-        }
-    }
-
-
     private void Patrolling()
     {
         if (!walkPointSet)
