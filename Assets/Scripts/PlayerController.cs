@@ -24,6 +24,12 @@ public class PlayerController : MonoBehaviour
     public float gravity = -9.81f;
     bool readyToJump = true;
 
+    [Header("Player Suspicion")]
+    public RectTransform suspicionLevel;
+    public float suspicionLevelProgress;
+    public float suspicionTimer = 2f;
+    public float ResetTimer = 2f;
+
     [Header("Sliding")]
     public float slideTimer;
     public float maxSlideTimer;
@@ -383,6 +389,39 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    void OnTriggerStay(Collider other)
+    {
+        if (other.tag == "GuardAttack")
+        {
+            other.transform.parent.GetComponent<GuardAI>().playerInAttackRange = true;
+            suspicionTimer -= Time.deltaTime;
+            if (suspicionTimer <= 0)
+            {
+                suspicionLevel.transform.localScale = new Vector3(transform.transform.localScale.x, suspicionLevelProgress, transform.transform.localScale.z);
+                suspicionLevelProgress += 1f;
+                Debug.Log("increasing");
+            }
+
+        }
+        if (other.tag == "GuardSight")
+        {
+            Debug.Log("Test2");
+            other.transform.parent.GetComponent<GuardAI>().playerInSightRange = true;
+            suspicionTimer -= Time.deltaTime;
+            if (suspicionTimer <= 0)
+            {
+                suspicionLevel.transform.localScale = new Vector3(transform.transform.localScale.x, suspicionLevelProgress , transform.transform.localScale.z);
+                suspicionLevelProgress += 1f;
+                if(suspicionLevelProgress <= 135f)
+                {
+                    SceneManager.LoadScene("Caught");
+                    Debug.Log("Test22");
+                }
+            }
+        }
+
+    }
+
     private void OnTriggerExit(Collider other)
     {
         if (other.tag == "GuardAttack")
@@ -392,6 +431,10 @@ public class PlayerController : MonoBehaviour
         if (other.tag == "GuardSight")
         {
             other.transform.parent.GetComponent<GuardAI>().playerInSightRange = false;
+        }
+        if(other.transform.parent.GetComponent<GuardAI>().playerInAttackRange == false && other.transform.parent.GetComponent<GuardAI>().playerInSightRange == false)
+        {
+            suspicionTimer = ResetTimer;
         }
     }
 
