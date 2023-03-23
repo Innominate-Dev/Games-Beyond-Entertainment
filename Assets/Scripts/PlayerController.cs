@@ -29,6 +29,8 @@ public class PlayerController : MonoBehaviour
     public float suspicionLevelProgress;
     public float suspicionTimer = 2f;
     public float ResetTimer = 2f;
+    public Light alarms;
+    private bool suspicionLevelMax;
 
     [Header("Sliding")]
     public float slideTimer;
@@ -139,6 +141,11 @@ public class PlayerController : MonoBehaviour
         if(Headbob == true)
         {
             HandleHeadbob();
+        }
+
+        if(suspicionLevelMax == true)
+        {
+            alarms.intensity = Mathf.Abs(Mathf.Sin(Time.time) * 10);
         }
     }
 
@@ -395,11 +402,14 @@ public class PlayerController : MonoBehaviour
         {
             other.transform.parent.GetComponent<GuardAI>().playerInAttackRange = true;
             suspicionTimer -= Time.deltaTime;
-            if (suspicionTimer <= 0)
+            if (suspicionTimer <= 0 && suspicionLevelMax == false)
             {
                 suspicionLevel.transform.localScale = new Vector3(transform.transform.localScale.x, suspicionLevelProgress, transform.transform.localScale.z);
-                suspicionLevelProgress += 1f;
-                Debug.Log("increasing");
+                suspicionLevelProgress += .5f;
+                if (suspicionLevelProgress > 135f)
+                {
+                    StartCoroutine(Alarm());
+                }
             }
 
         }
@@ -408,14 +418,14 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Test2");
             other.transform.parent.GetComponent<GuardAI>().playerInSightRange = true;
             suspicionTimer -= Time.deltaTime;
-            if (suspicionTimer <= 0)
+            if (suspicionTimer <= 0 && suspicionLevelMax == false)
             {
                 suspicionLevel.transform.localScale = new Vector3(transform.transform.localScale.x, suspicionLevelProgress , transform.transform.localScale.z);
-                suspicionLevelProgress += 1f;
-                if(suspicionLevelProgress <= 135f)
+                suspicionLevelProgress += .5f;
+                if(suspicionLevelProgress > 135f)
                 {
-                    SceneManager.LoadScene("Caught");
-                    Debug.Log("Test22");
+                    StartCoroutine(Alarm());
+                    suspicionLevelMax = true;
                 }
             }
         }
@@ -437,6 +447,8 @@ public class PlayerController : MonoBehaviour
             suspicionTimer = ResetTimer;
         }
     }
-
-
+    IEnumerator Alarm()
+    {
+        yield return new WaitForSeconds(5f);
+    }
 }
