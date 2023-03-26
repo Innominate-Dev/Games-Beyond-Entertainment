@@ -32,6 +32,8 @@ public class PlayerController : MonoBehaviour
     public Light alarms;
     private bool suspicionLevelMax;
 
+    public AudioSource IntruderAlarm;
+
     [Header("Sliding")]
     public float slideTimer;
     public float maxSlideTimer;
@@ -426,6 +428,7 @@ public class PlayerController : MonoBehaviour
                 {
                     StartCoroutine(Alarm());
                     suspicionLevelMax = true;
+                    IntruderAlarm.Play();
                 }
             }
         }
