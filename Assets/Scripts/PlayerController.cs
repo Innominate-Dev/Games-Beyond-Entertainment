@@ -29,8 +29,11 @@ public class PlayerController : MonoBehaviour
     public float suspicionLevelProgress;
     public float suspicionTimer = 2f;
     public float ResetTimer = 2f;
+    public float suspiciondecreaseTimer = 10f;
+    public float maxDecreaseTimer = 10f;
     public Light alarms;
     private bool suspicionLevelMax;
+    private bool isOutOfSight = true;
 
     public AudioSource IntruderAlarm;
 
@@ -148,6 +151,26 @@ public class PlayerController : MonoBehaviour
         if(suspicionLevelMax == true)
         {
             alarms.intensity = Mathf.Abs(Mathf.Sin(Time.time) * 10);
+        }
+
+        if(isOutOfSight == true)
+        {
+            if (suspicionLevelProgress > 0)
+            {
+                suspiciondecreaseTimer -= Time.deltaTime;
+                if (suspiciondecreaseTimer <= 0f)
+                {
+                    suspicionLevelProgress -= 0.05f;
+                    suspicionLevel.transform.localScale = new Vector3(transform.transform.localScale.x, suspicionLevelProgress, transform.transform.localScale.z);
+                    Debug.Log("Test");
+                }
+
+            }
+            else
+            {
+                suspiciondecreaseTimer = maxDecreaseTimer;
+            }
+
         }
 
     }
@@ -390,10 +413,12 @@ public class PlayerController : MonoBehaviour
     {
         if (other.tag == "GuardAttack")
         {
+            isOutOfSight = false;
             other.transform.parent.GetComponent<GuardAI>().playerInAttackRange = true;
         }
         if (other.tag == "GuardSight")
         {
+            isOutOfSight = false;
             other.transform.parent.GetComponent<GuardAI>().playerInSightRange = true;
         }
 
@@ -403,6 +428,7 @@ public class PlayerController : MonoBehaviour
     {
         if (other.tag == "GuardAttack")
         {
+            isOutOfSight = false;
             other.transform.parent.GetComponent<GuardAI>().playerInAttackRange = true;
             suspicionTimer -= Time.deltaTime;
             if (suspicionTimer <= 0 && suspicionLevelMax == false)
@@ -418,7 +444,7 @@ public class PlayerController : MonoBehaviour
         }
         if (other.tag == "GuardSight")
         {
-            Debug.Log("Test2");
+            isOutOfSight = false;
             other.transform.parent.GetComponent<GuardAI>().playerInSightRange = true;
             suspicionTimer -= Time.deltaTime;
             if (suspicionTimer <= 0 && suspicionLevelMax == false)
@@ -449,16 +475,12 @@ public class PlayerController : MonoBehaviour
         if(other.transform.parent.GetComponent<GuardAI>().playerInAttackRange == false && other.transform.parent.GetComponent<GuardAI>().playerInSightRange == false)
         {
             suspicionTimer = ResetTimer;
-            //StartCoroutine(SuspicionLevelDecrease());
+            suspiciondecreaseTimer = maxDecreaseTimer;
+            isOutOfSight = true;
         }
     }
     IEnumerator Alarm()
     {
         yield return new WaitForSeconds(5f);
-    }
-    IEnumerator SuspicionLevelDecrease()
-    {
-        yield return new WaitForSeconds(1f);
-
     }
 }
