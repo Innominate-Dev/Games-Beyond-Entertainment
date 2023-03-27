@@ -149,6 +149,7 @@ public class PlayerController : MonoBehaviour
         {
             alarms.intensity = Mathf.Abs(Mathf.Sin(Time.time) * 10);
         }
+
     }
 
     private void FixedUpdate() //// THIS METHOD IS BEING USED FOR THE PHYSICS CALCULATIONS SINCE FIXEDUPDATE CAN RUN SEVERAL TIMES In one frame.
@@ -448,10 +449,16 @@ public class PlayerController : MonoBehaviour
         if(other.transform.parent.GetComponent<GuardAI>().playerInAttackRange == false && other.transform.parent.GetComponent<GuardAI>().playerInSightRange == false)
         {
             suspicionTimer = ResetTimer;
+            //StartCoroutine(SuspicionLevelDecrease());
         }
     }
     IEnumerator Alarm()
     {
         yield return new WaitForSeconds(5f);
+    }
+    IEnumerator SuspicionLevelDecrease()
+    {
+        yield return new WaitForSeconds(1f);
+
     }
 }
