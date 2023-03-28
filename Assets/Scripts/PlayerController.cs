@@ -37,6 +37,8 @@ public class PlayerController : MonoBehaviour
 
     public AudioSource IntruderAlarm;
 
+    public Image CaughtScreen;
+
     [Header("Sliding")]
     public float slideTimer;
     public float maxSlideTimer;
@@ -115,9 +117,14 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        //playerCamera = GetComponent<Camera>();
         rb.freezeRotation = true;
         startYScale = Player.transform.localScale.y;
+
+        ////////////// Death Screen Fade Effect //////////////
+        Color color = CaughtScreen.color;
+        color.a = 0;
+        CaughtScreen.color = color;
+
     }
 
     // Update is called once per frame
@@ -481,6 +488,16 @@ public class PlayerController : MonoBehaviour
     }
     IEnumerator Alarm()
     {
+        
         yield return new WaitForSeconds(5f);
+        Color color = CaughtScreen.color;
+        while (color.a <= 1f && suspicionLevelMax == true)
+        {
+            color.a += 1f * Time.deltaTime;
+            CaughtScreen.color = color;
+            yield return new WaitForSeconds(0.1f);
+        }
+        yield return new WaitForSeconds(5f);
+        SceneManager.LoadScene("Caught");
     }
 }
