@@ -495,7 +495,7 @@ public class PlayerController : MonoBehaviour
         {
             color.a += 1f * Time.deltaTime;
             CaughtScreen.color = color;
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.01f);
         }
         yield return new WaitForSeconds(5f);
         SceneManager.LoadScene("Caught");
