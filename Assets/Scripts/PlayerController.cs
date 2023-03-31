@@ -180,6 +180,13 @@ public class PlayerController : MonoBehaviour
 
         }
 
+        if (suspicionLevelProgress > 135f)
+        {
+            StartCoroutine(Alarm());
+            suspicionLevelMax = true;
+            IntruderAlarm.Play();
+        }
+
     }
 
     private void FixedUpdate() //// THIS METHOD IS BEING USED FOR THE PHYSICS CALCULATIONS SINCE FIXEDUPDATE CAN RUN SEVERAL TIMES In one frame.
@@ -441,11 +448,8 @@ public class PlayerController : MonoBehaviour
             if (suspicionTimer <= 0 && suspicionLevelMax == false)
             {
                 suspicionLevel.transform.localScale = new Vector3(transform.transform.localScale.x, suspicionLevelProgress, transform.transform.localScale.z);
-                suspicionLevelProgress += .5f;
-                if (suspicionLevelProgress > 135f)
-                {
-                    StartCoroutine(Alarm());
-                }
+                suspicionLevelProgress += 1.5f;
+
             }
 
         }
@@ -457,13 +461,13 @@ public class PlayerController : MonoBehaviour
             if (suspicionTimer <= 0 && suspicionLevelMax == false)
             {
                 suspicionLevel.transform.localScale = new Vector3(transform.transform.localScale.x, suspicionLevelProgress , transform.transform.localScale.z);
-                suspicionLevelProgress += .5f;
-                if(suspicionLevelProgress > 135f)
-                {
-                    StartCoroutine(Alarm());
-                    suspicionLevelMax = true;
-                    IntruderAlarm.Play();
-                }
+                suspicionLevelProgress += 1.5f;
+                //if(suspicionLevelProgress > 135f)
+                //{
+                //    StartCoroutine(Alarm());
+                //    suspicionLevelMax = true;
+                //    IntruderAlarm.Play();
+                //}
             }
         }
 
@@ -495,7 +499,7 @@ public class PlayerController : MonoBehaviour
         {
             color.a += 1f * Time.deltaTime;
             CaughtScreen.color = color;
-            yield return new WaitForSeconds(0.01f);
+            yield return new WaitForSeconds(0.005f);
         }
         yield return new WaitForSeconds(5f);
         SceneManager.LoadScene("Caught");

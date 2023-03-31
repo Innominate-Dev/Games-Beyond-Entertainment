@@ -1285,7 +1285,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 867861b592ffe0147b7dc21354b98a67, type: 3}
       propertyPath: m_LocalScale.y
-      value: 261.72525
+      value: 140.25856
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 867861b592ffe0147b7dc21354b98a67, type: 3}
       propertyPath: m_LocalScale.z
@@ -1297,11 +1297,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 867861b592ffe0147b7dc21354b98a67, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.55
+      value: -0.49
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 867861b592ffe0147b7dc21354b98a67, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2.89
+      value: 2.01
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 867861b592ffe0147b7dc21354b98a67, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2093,8 +2093,8 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 5
-  m_Acceleration: 7
+  m_Speed: 3.5
+  m_Acceleration: 5
   avoidancePriority: 50
   m_AngularSpeed: 120
   m_StoppingDistance: 0
@@ -3128,7 +3128,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1293218240}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.65, y: -0.32, z: 4.9}
+  m_LocalPosition: {x: -0.65, y: -0.32, z: 4.77}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1040103100}
@@ -3145,8 +3145,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 7.3025413, y: 4.803672, z: 4.7986445}
-  m_Center: {x: 0.53025174, y: 0.4575945, z: 3.3737404}
+  m_Size: {x: 7.3025413, y: 4.803672, z: 7.0457473}
+  m_Center: {x: 0.53025174, y: 0.4575944, z: 2.250189}
 --- !u!64 &1306233379
 MeshCollider:
   m_ObjectHideFlags: 0
