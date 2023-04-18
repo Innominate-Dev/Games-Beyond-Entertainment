@@ -503,5 +503,7 @@ public class PlayerController : MonoBehaviour
         }
         yield return new WaitForSeconds(5f);
         SceneManager.LoadScene("Caught");
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 }
