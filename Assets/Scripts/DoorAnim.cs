@@ -64,7 +64,7 @@ public class DoorAnim : MonoBehaviour
                     openTimer += Time.deltaTime;
                 }
             }
-        }
+        }   
     }
     private void OnTriggerStay(Collider other)
     {
