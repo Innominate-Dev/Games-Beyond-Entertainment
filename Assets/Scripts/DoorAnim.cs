@@ -12,8 +12,9 @@ public class DoorAnim : MonoBehaviour
     public TextMeshProUGUI Interact;
 
     private bool isActive = false;
-
-    public 
+    private bool isOpen = false;
+    private float temp = 20;
+    private float temp1 = -20;
 
     // Start is called before the first frame update
     void Start()
@@ -24,9 +25,23 @@ public class DoorAnim : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(isOpen == true)
+        {
+            if (RDoor.localRotation.y <= 115f)
+            {
+                //RDoor.transform.rotation = Quaternion.Euler(new Vector3(0, temp, 0));
+                RDoor.Rotate(new Vector3(0, temp, 0) * Time.deltaTime);
+            }
+            if (LDoor.localRotation.y >= -115f)
+            {
+                
+                //LDoor.transform.rotation = Quaternion.Euler(new Vector3(0, temp1, 0));
+                LDoor.Rotate(new Vector3(0, temp1, 0) * Time.deltaTime);
+                Debug.Log(Time.deltaTime);
+            }
+        }
     }
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         if(other.tag == "Guard")
         {
@@ -35,7 +50,19 @@ public class DoorAnim : MonoBehaviour
         }
         else if(other.tag == "Player")
         {
+            Interaction();
+            if(Input.GetKey(KeyCode.E))
+            {
 
+                if (isOpen == true)
+                {
+                    isOpen = false;
+                }
+                else
+                {
+                    isOpen = true;
+                }
+            }
         }
     }
 
