@@ -48,22 +48,14 @@ public class DoorAnim : MonoBehaviour
             if (openTimer > 0)
             {
                 RDoor.localEulerAngles = new Vector3(RDoor.localEulerAngles.x, RDoor.localEulerAngles.y + temp * Time.deltaTime, RDoor.localEulerAngles.z);
-                LDoor.localEulerAngles = new Vector3(LDoor.localEulerAngles.x, LDoor.localEulerAngles.y + (temp1 * Time.deltaTime), LDoor.localEulerAngles.z);
+                LDoor.localEulerAngles = new Vector3(LDoor.localEulerAngles.x, LDoor.localEulerAngles.y - (temp * Time.deltaTime), LDoor.localEulerAngles.z);
                 openTimer -= Time.deltaTime;
                 Debug.Log(openTimer);
             }
         } 
-        else
+        else if(isOpen == false)
         {
-            if (openTimer < 5)
-            {
-                RDoor.localEulerAngles = new Vector3(RDoor.localEulerAngles.x, RDoor.localEulerAngles.y - temp * Time.deltaTime, RDoor.localEulerAngles.z);
-                LDoor.localEulerAngles = new Vector3(LDoor.localEulerAngles.x, LDoor.localEulerAngles.y - (temp1 * Time.deltaTime), LDoor.localEulerAngles.z);
-                if (openTimer != 5)
-                {
-                    openTimer += Time.deltaTime;
-                }
-            }
+
         }   
     }
     private void OnTriggerStay(Collider other)
@@ -93,7 +85,25 @@ public class DoorAnim : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        
+        if (other.tag == "Player")
+        {
+            Interact.gameObject.SetActive(false);
+            openTimer = 5f; 
+            if (openTimer > 0)
+            {
+                //RDoor.localEulerAngles = new Vector3(RDoor.localEulerAngles.x, RDoor.localEulerAngles.y - temp1 * Time.deltaTime, RDoor.localEulerAngles.z);
+                //LDoor.localEulerAngles = new Vector3(LDoor.localEulerAngles.x, LDoor.localEulerAngles.y - temp1 * Time.deltaTime, LDoor.localEulerAngles.z);
+
+                LDoor.localRotation = Quaternion.Lerp(LDoor.rotation, Quaternion.Euler(0f, 0f, 0f), 1.0f * Time.deltaTime);
+                RDoor.localRotation = Quaternion.Lerp(RDoor.rotation, Quaternion.Euler(0f, 0f, 0f), 1.0f * Time.deltaTime);
+
+                openTimer -= Time.deltaTime;
+            }
+            else
+            {
+                isOpen = false;
+            }
+        }
     }
 
     private void Interaction()
