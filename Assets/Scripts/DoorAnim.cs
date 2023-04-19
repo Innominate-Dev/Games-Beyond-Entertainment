@@ -13,8 +13,11 @@ public class DoorAnim : MonoBehaviour
 
     private bool isActive = false;
     private bool isOpen = false;
-    private float temp = 20;
-    private float temp1 = -20;
+
+    float openTimer = 5f;
+
+    public float temp = 20;
+    public float temp1 = 20;
 
     // Start is called before the first frame update
     void Start()
@@ -27,17 +30,39 @@ public class DoorAnim : MonoBehaviour
     {
         if(isOpen == true)
         {
-            if (RDoor.localRotation.y <= 115f)
+            /*if (RDoor.localRotation.eulerAngles.y <= 115f)
             {
                 //RDoor.transform.rotation = Quaternion.Euler(new Vector3(0, temp, 0));
-                RDoor.Rotate(new Vector3(0, temp, 0) * Time.deltaTime);
+                //RDoor.Rotate(new Vector3(0, temp, 0) * Time.deltaTime);
+                RDoor.localEulerAngles = new Vector3(RDoor.localEulerAngles.x, RDoor.localEulerAngles.y + temp * Time.deltaTime, RDoor.localEulerAngles.z);
             }
-            if (LDoor.localRotation.y >= -115f)
+            if (LDoor.localRotation.eulerAngles.y >= -115f)
             {
-                
+                Debug.Log(LDoor.localRotation.eulerAngles.y);
+                Debug.Log(temp1);
                 //LDoor.transform.rotation = Quaternion.Euler(new Vector3(0, temp1, 0));
-                LDoor.Rotate(new Vector3(0, temp1, 0) * Time.deltaTime);
-                Debug.Log(Time.deltaTime);
+                //LDoor.Rotate(new Vector3(0, temp1, 0) * Time.deltaTime);
+                LDoor.localEulerAngles = new Vector3(LDoor.localEulerAngles.x, LDoor.localEulerAngles.y + (temp1 * Time.deltaTime), LDoor.localEulerAngles.z);
+            }*/
+
+            if (openTimer > 0)
+            {
+                RDoor.localEulerAngles = new Vector3(RDoor.localEulerAngles.x, RDoor.localEulerAngles.y + temp * Time.deltaTime, RDoor.localEulerAngles.z);
+                LDoor.localEulerAngles = new Vector3(LDoor.localEulerAngles.x, LDoor.localEulerAngles.y + (temp1 * Time.deltaTime), LDoor.localEulerAngles.z);
+                openTimer -= Time.deltaTime;
+                Debug.Log(openTimer);
+            }
+        } 
+        else
+        {
+            if (openTimer < 5)
+            {
+                RDoor.localEulerAngles = new Vector3(RDoor.localEulerAngles.x, RDoor.localEulerAngles.y - temp * Time.deltaTime, RDoor.localEulerAngles.z);
+                LDoor.localEulerAngles = new Vector3(LDoor.localEulerAngles.x, LDoor.localEulerAngles.y - (temp1 * Time.deltaTime), LDoor.localEulerAngles.z);
+                if (openTimer != 5)
+                {
+                    openTimer += Time.deltaTime;
+                }
             }
         }
     }
@@ -50,15 +75,15 @@ public class DoorAnim : MonoBehaviour
         }
         else if(other.tag == "Player")
         {
-            Interaction();
-            if(Input.GetKey(KeyCode.E))
+            Interact.gameObject.SetActive(true);
+            if (Input.GetKey(KeyCode.E))
             {
 
                 if (isOpen == true)
                 {
                     isOpen = false;
                 }
-                else
+                if (isOpen == false)
                 {
                     isOpen = true;
                 }
@@ -66,9 +91,14 @@ public class DoorAnim : MonoBehaviour
         }
     }
 
+    private void OnTriggerExit(Collider other)
+    {
+        
+    }
+
     private void Interaction()
     {
         
-        Interact.gameObject.SetActive(true);
+        
     }
 }
