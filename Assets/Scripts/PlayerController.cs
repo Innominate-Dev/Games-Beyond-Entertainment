@@ -225,7 +225,10 @@ public class PlayerController : MonoBehaviour
         }
         else if(Input.GetKeyDown(crouchKey) && isCrouching == true && isGrounded == true)
         {
-            transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
+            transform.localScale = new Vector3(transform.localScale.x, 1.5f, transform.localScale.z);
+
+            //// The start scale doesn't work so I am putting a temporary value of the players scale///
+
             isCrouching = false;
             state = MovementState.crouching;
             moveSpeed = walkSpeed;
@@ -364,9 +367,10 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    ///////// RESET Y VELOCITY /////////////////
     private void Jump()
     {
-        ///////// RESET Y VELOCITY /////////////////
+        
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
@@ -462,6 +466,22 @@ public class PlayerController : MonoBehaviour
             {
                 suspicionLevel.transform.localScale = new Vector3(transform.transform.localScale.x, suspicionLevelProgress , transform.transform.localScale.z);
                 suspicionLevelProgress += 1.5f;
+                //if(suspicionLevelProgress > 135f)
+                //{
+                //    StartCoroutine(Alarm());
+                //    suspicionLevelMax = true;
+                //    IntruderAlarm.Play();
+                //}
+            }
+        }
+        if(other.tag == "CameraSight")
+        {
+            isOutOfSight = false;
+            suspicionTimer -= Time.deltaTime;
+            if (suspicionTimer <= 0 && suspicionLevelMax == false)
+            {
+                suspicionLevel.transform.localScale = new Vector3(transform.transform.localScale.x, suspicionLevelProgress, transform.transform.localScale.z);
+                suspicionLevelProgress += 1.25f;
                 //if(suspicionLevelProgress > 135f)
                 //{
                 //    StartCoroutine(Alarm());

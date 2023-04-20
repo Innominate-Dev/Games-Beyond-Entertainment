@@ -8,6 +8,7 @@ TagManager:
   - Guard
   - GuardAttack
   - GuardSight
+  - CameraSight
   layers:
   - Default
   - TransparentFX
