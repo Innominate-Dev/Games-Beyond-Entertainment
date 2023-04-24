@@ -9,6 +9,7 @@ TagManager:
   - GuardAttack
   - GuardSight
   - CameraSight
+  - Evidence
   layers:
   - Default
   - TransparentFX

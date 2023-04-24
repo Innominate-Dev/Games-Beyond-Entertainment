@@ -313,7 +313,6 @@ public class PlayerController : MonoBehaviour
         {
             reset = true;
             isSliding = false;
-            Debug.Log("Reset");
         }
 
     }
