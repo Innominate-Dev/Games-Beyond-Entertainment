@@ -23,10 +23,17 @@ public class Interactable : MonoBehaviour
     public TextMeshProUGUI EvidenceText;
 
     public Animator EvidenceOpening;
+    public Animator CabinetOpening;
 
     [Header("Logic")]
     private float EvidenceFound = 0;
-    private bool isInspecting; 
+    private bool isInspecting;
+    private bool isCabinetOpen;
+
+    float openTimer = 5f;
+
+    public float temp = 20;
+    public float temp1 = 20;
 
     // Start is called before the first frame update
     void Start()
@@ -65,6 +72,24 @@ public class Interactable : MonoBehaviour
                     EvidenceFound += 1;
                     Destroy(hit.collider.gameObject);
                     EvidenceText.text = "Evidence Found " + EvidenceFound + "/10";
+                }
+            }
+            else if(hit.collider.tag == "Cabinet")
+            {
+                InteractionActive();
+                if(Input.GetKeyDown(KeyCode.E) && isCabinetOpen == false)
+                {
+                    //hit.collider.transform.localEulerAngles = new Vector3(hit.collider.transform.localEulerAngles.x + temp * Time.deltaTime, hit.collider.transform.localEulerAngles.y, hit.collider.transform.localEulerAngles.z + temp * Time.deltaTime);
+                    hit.collider.GetComponent<Rigidbody>().velocity = transform.forward * Time.deltaTime;
+                    openTimer -= Time.deltaTime;
+                    Debug.Log(openTimer);
+                    isCabinetOpen = true;
+                }
+                else if (Input.GetKeyDown(KeyCode.E) && isCabinetOpen == true)
+                {
+                    CabinetOpening = hit.collider.GetComponent<Animator>();
+                    CabinetOpening.SetBool("isOpen", false);
+                    isCabinetOpen = false;
                 }
             }
             else
