@@ -10,6 +10,7 @@ TagManager:
   - GuardSight
   - CameraSight
   - Evidence
+  - Cabinet
   layers:
   - Default
   - TransparentFX
