@@ -501,14 +501,16 @@ public class PlayerController : MonoBehaviour
         if (other.tag == "GuardSight")
         {
             other.transform.parent.GetComponent<GuardAI>().playerInSightRange = false;
-        }
-        if(other.transform.parent.GetComponent<GuardAI>().playerInAttackRange == false && other.transform.parent.GetComponent<GuardAI>().playerInSightRange == false)
-        {
-            suspicionTimer = ResetTimer;
-            suspiciondecreaseTimer = maxDecreaseTimer;
-            isOutOfSight = true;
+
+            if (other.transform.parent.GetComponent<GuardAI>().playerInAttackRange == false && other.transform.parent.GetComponent<GuardAI>().playerInSightRange == false)
+            {
+                suspicionTimer = ResetTimer;
+                suspiciondecreaseTimer = maxDecreaseTimer;
+                isOutOfSight = true;
+            }
         }
     }
+
     IEnumerator Alarm()
     {
         

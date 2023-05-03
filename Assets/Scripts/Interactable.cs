@@ -18,6 +18,7 @@ public class Interactable : MonoBehaviour
     public float DistanceRay = 0.1f;
 
     public RawImage UICrosshair;
+    public RawImage HandInteract;
     public TextMeshProUGUI Interaction;
 
     public TextMeshProUGUI EvidenceText;
@@ -28,11 +29,7 @@ public class Interactable : MonoBehaviour
     [Header("Logic")]
     private float EvidenceFound = 0;
     private bool isInspecting;
-    private bool isCabinetOpen;
 
-    float openTimer = 5f;
-
-    public float temp = 20;
     public float temp1 = 20;
 
     // Start is called before the first frame update
@@ -47,9 +44,10 @@ public class Interactable : MonoBehaviour
 
         Ray ray = cam.ViewportPointToRay(new Vector3(DistanceX, DistanceY, DistanceRay));
         RaycastHit hit;
+
         if (Physics.Linecast(ray.origin, ray.origin + ray.direction * DistanceRay, out hit))
         {
-            Debug.Log(hit.collider.name);
+            //Debug.Log(hit.collider.name);
             if(hit.collider.tag == "Evidence")
             {
                 InteractionActive();
@@ -76,33 +74,39 @@ public class Interactable : MonoBehaviour
             }
             else if(hit.collider.tag == "Cabinet")
             {
-                InteractionActive();
-                if(Input.GetKeyDown(KeyCode.E) && isCabinetOpen == false)
+                HandInteract.gameObject.SetActive(true);
+
+                Cabinet cabinet = hit.collider.transform.GetComponent<Cabinet>();
+
+                if(Input.GetKeyDown(KeyCode.E) && cabinet.IsCabinetOpen() == false)
                 {
-                    //hit.collider.transform.localEulerAngles = new Vector3(hit.collider.transform.localEulerAngles.x + temp * Time.deltaTime, hit.collider.transform.localEulerAngles.y, hit.collider.transform.localEulerAngles.z + temp * Time.deltaTime);
-                    hit.collider.GetComponent<Rigidbody>().velocity = transform.forward * Time.deltaTime;
-                    openTimer -= Time.deltaTime;
-                    Debug.Log(openTimer);
-                    isCabinetOpen = true;
+                    //hit.collider.transform.localPosition = new Vector3(hit.collider.transform.localPosition.x + temp * Time.deltaTime, hit.collider.transform.localPosition.y, hit.collider.transform.localPosition.z + temp * Time.deltaTime);
+                    //hit.collider.GetComponent<Rigidbody>().velocity = transform.forward * Time.deltaTime;
+                    Debug.Log("Set cabinet open");
+                    cabinet.ToggleCabinet();
                 }
-                else if (Input.GetKeyDown(KeyCode.E) && isCabinetOpen == true)
+                else if (Input.GetKeyDown(KeyCode.E) && cabinet.IsCabinetOpen() == true)
                 {
-                    CabinetOpening = hit.collider.GetComponent<Animator>();
-                    CabinetOpening.SetBool("isOpen", false);
-                    isCabinetOpen = false;
+                    //CabinetOpening = hit.collider.GetComponent<Animator>();
+                    //CabinetOpening.SetBool("isOpen", false);
+                    Debug.Log("Set cabinet closed");
+                    cabinet.ToggleCabinet();
                 }
             }
             else
             {
-                InteractionDeactive();
+                 InteractionDeactive();
+                HandInteract.gameObject.SetActive(true);
             }
         }
         else
         {
             InteractionDeactive();
+            HandInteract.gameObject.SetActive(false);
         }
 
         Debug.DrawLine(transform.position, hit.point, Color.blue);
+
     }
 
     public void InteractionActive()
