@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class PauseGame : MonoBehaviour
 {
     public bool GameIsPaused = false;
+    public GameObject InteractManager;
     public GameObject pauseMenuUI;
     public RawImage Interaction;
 
@@ -19,6 +20,7 @@ public class PauseGame : MonoBehaviour
             Cursor.lockState = CursorLockMode.Locked;
             Time.timeScale = 1;
             GameIsPaused = false;
+            InteractManager.SetActive(true);
             Interaction.gameObject.SetActive(true);
         }
         else
@@ -28,6 +30,7 @@ public class PauseGame : MonoBehaviour
             pauseMenuUI.SetActive(true);
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
+            InteractManager.SetActive(false);
             Interaction.gameObject.SetActive(false);
         }
     }

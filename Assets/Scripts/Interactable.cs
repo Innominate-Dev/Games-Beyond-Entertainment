@@ -65,7 +65,7 @@ public class Interactable : MonoBehaviour
                     Debug.Log("Picked Up");
                     isInspecting = false;
                 }
-                if(Input.GetMouseButton(0))
+                if(Input.GetKeyDown(KeyCode.F))
                 {
                     EvidenceFound += 1;
                     Destroy(hit.collider.gameObject);
