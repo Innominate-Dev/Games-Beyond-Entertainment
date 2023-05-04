@@ -31,11 +31,11 @@ public class PlayerController : MonoBehaviour
     public float ResetTimer = 2f;
     public float suspiciondecreaseTimer = 10f;
     public float maxDecreaseTimer = 10f;
-    public Light alarms;
+    public GameObject[] IntruderAlert;
     private bool suspicionLevelMax;
     private bool isOutOfSight = true;
 
-    public AudioSource IntruderAlarm;
+    public AudioSource[] IntruderAlarm;
 
     public Image CaughtScreen;
 
@@ -157,7 +157,12 @@ public class PlayerController : MonoBehaviour
 
         if(suspicionLevelMax == true)
         {
-            alarms.intensity = Mathf.Abs(Mathf.Sin(Time.time) * 10);
+            //alarms.intensity = Mathf.Abs(Mathf.Sin(Time.time) * 10);
+            for (int i = 0; i < IntruderAlert.Length; i++)
+            {
+                IntruderAlert[i].GetComponentInChildren<Light>().intensity = Mathf.Abs(Mathf.Sin(Time.time) * 10);
+            }
+
         }
 
         if(isOutOfSight == true)
@@ -184,7 +189,18 @@ public class PlayerController : MonoBehaviour
         {
             StartCoroutine(Alarm());
             suspicionLevelMax = true;
-            IntruderAlarm.Play();
+
+            Debug.Log("play");
+
+            for (int i = 0; i < IntruderAlarm.Length; i++)
+            {
+                if (!IntruderAlarm[i].isPlaying)
+                {
+                    IntruderAlarm[i].Play();
+                }
+            }
+
+            //IntruderAlarm.Play();
         }
 
     }
@@ -513,7 +529,6 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator Alarm()
     {
-        
         yield return new WaitForSeconds(5f);
         Color color = CaughtScreen.color;
         while (color.a <= 1f && suspicionLevelMax == true)

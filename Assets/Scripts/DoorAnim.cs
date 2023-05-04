@@ -51,8 +51,8 @@ public class DoorAnim : MonoBehaviour
         {
             if (openTimer <5)
             {
-                RDoor.localEulerAngles = new Vector3(RDoor.localEulerAngles.x, RDoor.localEulerAngles.y - temp * Time.deltaTime, RDoor.localEulerAngles.z);
-                LDoor.localEulerAngles = new Vector3(LDoor.localEulerAngles.x, LDoor.localEulerAngles.y + (temp * Time.deltaTime), LDoor.localEulerAngles.z);
+                RDoor.localEulerAngles = new Vector3(RDoor.localEulerAngles.x, RDoor.localEulerAngles.y - temp1 * Time.deltaTime, RDoor.localEulerAngles.z);
+                LDoor.localEulerAngles = new Vector3(LDoor.localEulerAngles.x, LDoor.localEulerAngles.y + (temp1 * Time.deltaTime), LDoor.localEulerAngles.z);
                 openTimer += Time.deltaTime;
                 Debug.Log(openTimer);
             }
