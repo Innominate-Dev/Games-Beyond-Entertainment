@@ -67,9 +67,16 @@ public class Interactable : MonoBehaviour
                 }
                 if(Input.GetKeyDown(KeyCode.F))
                 {
-                    EvidenceFound += 1;
-                    Destroy(hit.collider.gameObject);
-                    EvidenceText.text = "Evidence Found " + EvidenceFound + "/10";
+                    if (EvidenceFound == 10)
+                    {
+                        UnityEngine.SceneManagement.SceneManager.LoadScene("WinScene");
+                    }
+                    else
+                    {
+                        EvidenceFound += 1;
+                        Destroy(hit.collider.gameObject);
+                        EvidenceText.text = "Evidence Found " + EvidenceFound + "/10";
+                    }
                 }
             }
             else if(hit.collider.tag == "Cabinet")
@@ -78,14 +85,14 @@ public class Interactable : MonoBehaviour
 
                 Cabinet cabinet = hit.collider.transform.GetComponent<Cabinet>();
 
-                if(Input.GetKeyDown(KeyCode.E) && cabinet.IsCabinetOpen() == false)
+                if(Input.GetMouseButtonDown(0) && cabinet.IsCabinetOpen() == false)
                 {
                     //hit.collider.transform.localPosition = new Vector3(hit.collider.transform.localPosition.x + temp * Time.deltaTime, hit.collider.transform.localPosition.y, hit.collider.transform.localPosition.z + temp * Time.deltaTime);
                     //hit.collider.GetComponent<Rigidbody>().velocity = transform.forward * Time.deltaTime;
                     Debug.Log("Set cabinet open");
                     cabinet.ToggleCabinet();
                 }
-                else if (Input.GetKeyDown(KeyCode.E) && cabinet.IsCabinetOpen() == true)
+                else if (Input.GetMouseButtonDown(0) && cabinet.IsCabinetOpen() == true)
                 {
                     //CabinetOpening = hit.collider.GetComponent<Animator>();
                     //CabinetOpening.SetBool("isOpen", false);
