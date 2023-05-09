@@ -241,7 +241,7 @@ public class PlayerController : MonoBehaviour
         }
         else if(Input.GetKeyDown(crouchKey) && isCrouching == true && isGrounded == true)
         {
-            transform.localScale = new Vector3(transform.localScale.x, 1.5f, transform.localScale.z);
+            transform.localScale = new Vector3(transform.localScale.x,startYScale, transform.localScale.z);
 
             //// The start scale doesn't work so I am putting a temporary value of the players scale///
 

@@ -103,7 +103,7 @@ public class Interactable : MonoBehaviour
             else
             {
                  InteractionDeactive();
-                HandInteract.gameObject.SetActive(true);
+                HandInteract.gameObject.SetActive(false);
             }
         }
         else
@@ -118,12 +118,14 @@ public class Interactable : MonoBehaviour
 
     public void InteractionActive()
     {
+        HandInteract.gameObject.SetActive(true);
         UICrosshair.gameObject.SetActive(false);
         Interaction.gameObject.SetActive(true);
     }
 
     public void InteractionDeactive()
     {
+        HandInteract.gameObject.SetActive(false);
         UICrosshair.gameObject.SetActive(true);
         Interaction.gameObject.SetActive(false);
     }

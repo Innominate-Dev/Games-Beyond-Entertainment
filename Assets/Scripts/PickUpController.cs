@@ -39,12 +39,17 @@ public class PickUpController : MonoBehaviour
                         isItEvidence = true;
                         PickupObject(hit.transform.gameObject);
                     }
+                    else
+                    {
+                        isItEvidence = false;
+                        PickupObject(hit.transform.gameObject);
+                    }
                 }
             }
             else
             {
                 DropObject();
-                isItEvidence = false;
+                Debug.Log("dropping");
             }
         }
         if(heldObj != null)
@@ -85,10 +90,12 @@ public class PickUpController : MonoBehaviour
         if (isItEvidence == true)
         {
             heldObj.transform.parent = Evidence.transform;
+            isItEvidence = false;
         }
         else
         {
             heldObjRB.transform.parent = null;
+            isItEvidence = false;
         }
     }
 }
