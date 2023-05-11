@@ -93,6 +93,9 @@ public class PlayerController : MonoBehaviour
 
     public TextMeshProUGUI health;
 
+    public AudioSource footstepsSound;
+    public AudioSource RunningSounds;
+
 
     /////////////////// MOVEMENT STATE ///////////////////
 
@@ -183,6 +186,7 @@ public class PlayerController : MonoBehaviour
                 suspiciondecreaseTimer = maxDecreaseTimer;
             }
 
+
         }
 
         if (suspicionLevelProgress > 135f)
@@ -203,6 +207,34 @@ public class PlayerController : MonoBehaviour
             //IntruderAlarm.Play();
         }
 
+        /////////////////// SOUND SYSTEM //////////////////
+
+        if (rb.velocity.x > 0 || rb.velocity.z > 0 && IsSprinting == false)
+        {
+            Debug.Log("playing sound foot");
+            if (footstepsSound.isPlaying == false)
+            {
+                RunningSounds.Stop();
+                footstepsSound.Play();
+            }
+
+        }
+        else if (rb.velocity.x > 0 || rb.velocity.z > 0 && IsSprinting == true)
+        {
+            Debug.Log("Playing Running Sound");
+            if(RunningSounds.isPlaying == false)
+            {
+                footstepsSound.Stop();
+                RunningSounds.Play();
+            }
+
+        }
+        else if(rb.velocity.x == 0 || rb.velocity.z == 0)
+        {
+            Debug.Log("not moving");
+            RunningSounds.Stop();
+            footstepsSound.Stop();
+        }
     }
 
     private void FixedUpdate() //// THIS METHOD IS BEING USED FOR THE PHYSICS CALCULATIONS SINCE FIXEDUPDATE CAN RUN SEVERAL TIMES In one frame.
@@ -220,6 +252,8 @@ public class PlayerController : MonoBehaviour
         /////////////// MOVEMENT SYSTEM //////////////////
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
+
+
 
         ////////////////// JUMP SYSTEM ///////////////////
 
@@ -273,11 +307,9 @@ public class PlayerController : MonoBehaviour
         }
         else if (isGrounded)
         {
-
             state = MovementState.walking;
             moveSpeed = walkSpeed;
             isSliding = false;
-
         }
         else if (!isGrounded)
         {
@@ -358,6 +390,7 @@ public class PlayerController : MonoBehaviour
         // CALCULATES THE MOVEMENT DIRECTION
 
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
+
         //WHEN ON THE GROUND
         if (isGrounded)
         {
