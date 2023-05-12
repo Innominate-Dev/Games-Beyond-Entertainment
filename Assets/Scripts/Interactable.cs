@@ -67,7 +67,7 @@ public class Interactable : MonoBehaviour
                 }
                 if(Input.GetKeyDown(KeyCode.F))
                 {
-                    if (EvidenceFound == 10)
+                    if (EvidenceFound == 5f)
                     {
                         UnityEngine.SceneManagement.SceneManager.LoadScene("WinScene");
                     }
@@ -75,7 +75,7 @@ public class Interactable : MonoBehaviour
                     {
                         EvidenceFound += 1;
                         Destroy(hit.collider.gameObject);
-                        EvidenceText.text = "Evidence Found " + EvidenceFound + "/10";
+                        EvidenceText.text = "Evidence Found " + EvidenceFound + "/5";
                     }
                 }
             }
