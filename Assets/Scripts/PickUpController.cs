@@ -17,11 +17,6 @@ public class PickUpController : MonoBehaviour
     [Header("Logic")]
     bool isItEvidence;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     // Update is called once per frame
     void Update()
@@ -87,15 +82,6 @@ public class PickUpController : MonoBehaviour
         heldObjRB.drag = 1;
         heldObjRB.constraints = RigidbodyConstraints.None;
 
-        if (isItEvidence == true)
-        {
-            heldObj.transform.parent = Evidence.transform;
-            isItEvidence = false;
-        }
-        else
-        {
-            heldObjRB.transform.parent = null;
-            isItEvidence = false;
-        }
+        heldObj.transform.parent = null;
     }
 }

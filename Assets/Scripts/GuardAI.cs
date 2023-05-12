@@ -31,10 +31,17 @@ public class GuardAI : MonoBehaviour
     public float sightRange, attackRange;
     public bool playerInSightRange, playerInAttackRange;
 
+    //Animation
+    Animator myAnim;
+    Rigidbody rb;
+
+
     private void Awake()
     {
         player = GameObject.Find("PlayerObj").transform;
         agent = GetComponent<NavMeshAgent>();
+        myAnim = GetComponentInChildren<Animator>();
+        rb = GetComponent<Rigidbody>();
     }
 
     private void Start()
@@ -61,6 +68,7 @@ public class GuardAI : MonoBehaviour
         {
             AttackPlayer();
         }
+         myAnim.SetFloat("speed", rb.velocity.sqrMagnitude);
     }
 
     private void Patrolling()
