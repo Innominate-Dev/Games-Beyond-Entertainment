@@ -11,6 +11,7 @@ TagManager:
   - CameraSight
   - Evidence
   - Cabinet
+  - VoiceActing2
   layers:
   - Default
   - TransparentFX

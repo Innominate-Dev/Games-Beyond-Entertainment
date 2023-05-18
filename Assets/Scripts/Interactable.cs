@@ -26,6 +26,9 @@ public class Interactable : MonoBehaviour
     public Animator EvidenceOpening;
     public Animator CabinetOpening;
 
+    public AudioSource VoiceManager;
+    public AudioClip WinningClip;
+
     [Header("Logic")]
     private float EvidenceFound = 0;
     private bool isInspecting;
@@ -69,11 +72,17 @@ public class Interactable : MonoBehaviour
                 {
                     if (EvidenceFound == 5f)
                     {
-                        UnityEngine.SceneManagement.SceneManager.LoadScene("WinScene");
+                        Debug.Log("YOU WIN!!!");
+                        
                     }
                     else
                     {
                         EvidenceFound += 1;
+                        if(EvidenceFound == 5f)
+                        {
+                            VoiceManager.PlayOneShot(WinningClip);
+                            StartCoroutine(WinningScene());
+                        }
                         Destroy(hit.collider.gameObject);
                         EvidenceText.text = "Evidence Found " + EvidenceFound + "/5";
                     }
@@ -128,6 +137,12 @@ public class Interactable : MonoBehaviour
         HandInteract.gameObject.SetActive(false);
         UICrosshair.gameObject.SetActive(true);
         Interaction.gameObject.SetActive(false);
+    }
+
+    IEnumerator WinningScene()
+    {
+        yield return new WaitForSeconds(5f);
+        UnityEngine.SceneManagement.SceneManager.LoadScene("WinScene");
     }
 
 }

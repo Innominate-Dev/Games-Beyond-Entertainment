@@ -96,6 +96,9 @@ public class PlayerController : MonoBehaviour
     public AudioSource footstepsSound;
     public AudioSource RunningSounds;
 
+    public AudioClip VoiceActing2;
+    bool isVoiceActing2;
+
 
     /////////////////// MOVEMENT STATE ///////////////////
 
@@ -275,7 +278,7 @@ public class PlayerController : MonoBehaviour
         }
         else if(Input.GetKeyDown(crouchKey) && isCrouching == true && isGrounded == true)
         {
-            transform.localScale = new Vector3(transform.localScale.x,startYScale, transform.localScale.z);
+            transform.localScale = new Vector3(transform.localScale.x,1.25f, transform.localScale.z);
 
             //// The start scale doesn't work so I am putting a temporary value of the players scale///
 
@@ -486,6 +489,15 @@ public class PlayerController : MonoBehaviour
         {
             isOutOfSight = false;
             other.transform.parent.GetComponent<GuardAI>().playerInSightRange = true;
+        }
+        if(other.tag == "VoiceActing2")
+        {
+           
+            if (isVoiceActing2 == false)
+            {
+                Player.GetComponentInChildren<AudioSource>().PlayOneShot(VoiceActing2);
+                isVoiceActing2 = true;
+            }
         }
 
     }
