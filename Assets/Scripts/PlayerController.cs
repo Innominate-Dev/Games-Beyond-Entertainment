@@ -570,6 +570,12 @@ public class PlayerController : MonoBehaviour
                 isOutOfSight = true;
             }
         }
+        if(other.tag == "CameraSight")
+        {
+            suspicionTimer = ResetTimer;
+            suspiciondecreaseTimer = maxDecreaseTimer;
+            isOutOfSight = true;
+        }
     }
 
     IEnumerator Alarm()
