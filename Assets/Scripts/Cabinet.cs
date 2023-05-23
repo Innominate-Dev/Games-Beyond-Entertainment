@@ -34,7 +34,6 @@ public class Cabinet : MonoBehaviour
             }
         }
 
-        Debug.Log(transform.localPosition);
     }
 
     public bool IsCabinetOpen()
