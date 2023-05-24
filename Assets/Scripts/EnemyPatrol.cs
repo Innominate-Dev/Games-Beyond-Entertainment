@@ -10,50 +10,63 @@ public class EnemyPatrol : MonoBehaviour
     public int index = 0;
     public bool isLoop = true;
     public float timeCount;
+    Vector3 destination;
+    bool changingDirection = false;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        destination = waypoints[index].transform.position;
     }
 
     // Update is called once per frame
     void Update()
     {
-
-        Vector3 destination = waypoints[index].transform.position;
-        Vector3 newPos = Vector3.MoveTowards(transform.position, destination,speed * Time.deltaTime);
-        transform.position = newPos;
-
         float distance = Vector3.Distance(transform.position, destination);
         Debug.Log(distance);
 
 
-
-
-        if (distance <= 0.7f)
+        if (!changingDirection)
         {
-            Debug.Log("CloseBy");
-            if(index < waypoints.Count - 1)
+            if (distance <= 0.7f)
             {
-                StartCoroutine(LookAt());
+                Debug.Log("CloseBy");
+                if (index < waypoints.Count - 1)
+                {
+                    ChangeWaypoint();
+                }
+                else
+                {
+                    if (isLoop)
+                    {
+                        index = -1;
+                    }
+                    Debug.Log("Finished at destination");
+                }
             }
             else
             {
-                if(isLoop)
-                {
-                    index = 0;
-                }
-                Debug.Log("Finished at destination");
+                Vector3 newPos = Vector3.MoveTowards(transform.position, destination, speed * Time.deltaTime);
+                transform.position = newPos;
+            }
+        } 
+        else
+        {
+            Vector3 targetRotation = (destination - transform.position).normalized;
+
+            transform.forward = Vector3.RotateTowards(transform.forward, targetRotation, Time.deltaTime, Time.deltaTime);
+            //transform.LookAt(waypoints[index].transform.position);
+            if (Vector3.Dot(transform.forward, targetRotation) > 0.95f)
+            {
+                changingDirection = false;
             }
         }
-
     }
 
-    IEnumerator LookAt()
+    void ChangeWaypoint()
     {
-        yield return new WaitForSeconds(2);
-        transform.LookAt(waypoints[index].transform.position);
         index++;
+        destination = waypoints[index].transform.position;
+        changingDirection = true;
     }
 }
