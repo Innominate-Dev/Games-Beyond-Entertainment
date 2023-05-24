@@ -10,6 +10,7 @@ public class EnemyPatrol : MonoBehaviour
     public int index = 0;
     public bool isLoop = true;
     public float timeCount;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -26,13 +27,16 @@ public class EnemyPatrol : MonoBehaviour
 
         float distance = Vector3.Distance(transform.position, destination);
         Debug.Log(distance);
-        if(distance <= 0.7f)
+
+
+
+
+        if (distance <= 0.7f)
         {
             Debug.Log("CloseBy");
             if(index < waypoints.Count - 1)
             {
-                //transform.Rotate(waypoints[index].transform.position.x, transform.position.y, waypoints[index].transform.position.z);
-                index++;
+                StartCoroutine(LookAt());
             }
             else
             {
@@ -44,5 +48,12 @@ public class EnemyPatrol : MonoBehaviour
             }
         }
 
+    }
+
+    IEnumerator LookAt()
+    {
+        yield return new WaitForSeconds(2);
+        transform.LookAt(waypoints[index].transform.position);
+        index++;
     }
 }
