@@ -483,12 +483,23 @@ public class PlayerController : MonoBehaviour
         if (other.tag == "GuardAttack")
         {
             isOutOfSight = false;
-            other.transform.parent.GetComponent<GuardAI>().playerInAttackRange = true;
+            GuardAI guardAI = other.transform.parent.GetComponent<GuardAI>();
+
+            if (guardAI != null)
+            {
+                guardAI.playerInAttackRange = true;
+            }
+
         }
         if (other.tag == "GuardSight")
         {
             isOutOfSight = false;
-            other.transform.parent.GetComponent<GuardAI>().playerInSightRange = true;
+            GuardAI guardAI = other.transform.parent.GetComponent<GuardAI>();
+
+            if (guardAI != null)
+            {
+                guardAI.playerInSightRange = true;
+            }
         }
         if(other.tag == "VoiceActing2")
         {
@@ -507,7 +518,12 @@ public class PlayerController : MonoBehaviour
         if (other.tag == "GuardAttack")
         {
             isOutOfSight = false;
-            other.transform.parent.GetComponent<GuardAI>().playerInAttackRange = true;
+            GuardAI guardAI = other.transform.parent.GetComponent<GuardAI>();
+
+            if (guardAI != null)
+            {
+                guardAI.playerInAttackRange = true;
+            }
             suspicionTimer -= Time.deltaTime;
             if (suspicionTimer <= 0 && suspicionLevelMax == false)
             {
@@ -520,7 +536,13 @@ public class PlayerController : MonoBehaviour
         if (other.tag == "GuardSight")
         {
             isOutOfSight = false;
-            other.transform.parent.GetComponent<GuardAI>().playerInSightRange = true;
+            GuardAI guardAI = other.transform.parent.GetComponent<GuardAI>();
+
+            if (guardAI != null)
+            {
+                guardAI.playerInSightRange = true;
+            }
+
             suspicionTimer -= Time.deltaTime;
             if (suspicionTimer <= 0 && suspicionLevelMax == false)
             {
@@ -557,11 +579,22 @@ public class PlayerController : MonoBehaviour
     {
         if (other.tag == "GuardAttack")
         {
-            other.transform.parent.GetComponent<GuardAI>().playerInAttackRange = false;
+            GuardAI guardAI = other.transform.parent.GetComponent<GuardAI>();
+
+            if (guardAI != null)
+            {
+                guardAI.playerInAttackRange = false;
+            }
+
         }
         if (other.tag == "GuardSight")
         {
-            other.transform.parent.GetComponent<GuardAI>().playerInSightRange = false;
+            GuardAI guardAI = other.transform.parent.GetComponent<GuardAI>();
+
+            if (guardAI != null)
+            {
+                guardAI.playerInSightRange = false;
+            }
 
             if (other.transform.parent.GetComponent<GuardAI>().playerInAttackRange == false && other.transform.parent.GetComponent<GuardAI>().playerInSightRange == false)
             {

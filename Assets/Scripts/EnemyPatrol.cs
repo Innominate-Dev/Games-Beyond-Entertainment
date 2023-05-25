@@ -12,6 +12,9 @@ public class EnemyPatrol : MonoBehaviour
     public float timeCount;
     Vector3 destination;
     bool changingDirection = false;
+    bool canSeePlayer = false;
+
+    float DistanceRay;
 
     // Start is called before the first frame update
     void Start()
@@ -25,6 +28,20 @@ public class EnemyPatrol : MonoBehaviour
         float distance = Vector3.Distance(transform.position, destination);
         Debug.Log(distance);
 
+        RaycastHit hit;
+        Physics.Raycast(transform.position, transform.forward * DistanceRay, out hit);
+
+        Debug.DrawRay(transform.position, transform.forward);
+
+        if (hit.collider.tag == "Player")
+        {
+            canSeePlayer = true;
+        } else
+        {
+            canSeePlayer = false;
+        }
+
+        Debug.Log(canSeePlayer);
 
         if (!changingDirection)
         {
