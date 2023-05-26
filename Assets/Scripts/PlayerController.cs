@@ -495,11 +495,12 @@ public class PlayerController : MonoBehaviour
         {
             isOutOfSight = false;
             GuardAI guardAI = other.transform.parent.GetComponent<GuardAI>();
-
+            EnemyPatrol patrol = other.transform.parent.GetComponent<EnemyPatrol>();
             if (guardAI != null)
             {
                 guardAI.playerInSightRange = true;
             }
+
         }
         if(other.tag == "VoiceActing2")
         {
@@ -519,17 +520,26 @@ public class PlayerController : MonoBehaviour
         {
             isOutOfSight = false;
             GuardAI guardAI = other.transform.parent.GetComponent<GuardAI>();
+            EnemyPatrol patrol = other.transform.parent.GetComponent<EnemyPatrol>();
 
             if (guardAI != null)
             {
                 guardAI.playerInAttackRange = true;
             }
-            suspicionTimer -= Time.deltaTime;
-            if (suspicionTimer <= 0 && suspicionLevelMax == false)
+            if (patrol.canSeePlayer == true)
             {
-                suspicionLevel.transform.localScale = new Vector3(transform.transform.localScale.x, suspicionLevelProgress, transform.transform.localScale.z);
-                suspicionLevelProgress += 1.5f;
-
+                suspicionTimer -= Time.deltaTime;
+                if (suspicionTimer <= 0 && suspicionLevelMax == false)
+                {
+                    suspicionLevel.transform.localScale = new Vector3(transform.transform.localScale.x, suspicionLevelProgress, transform.transform.localScale.z);
+                    suspicionLevelProgress += 1.5f;
+                    //if(suspicionLevelProgress > 135f)
+                    //{
+                    //    StartCoroutine(Alarm());
+                    //    suspicionLevelMax = true;
+                    //    IntruderAlarm.Play();
+                    //}
+                }
             }
 
         }
@@ -537,24 +547,29 @@ public class PlayerController : MonoBehaviour
         {
             isOutOfSight = false;
             GuardAI guardAI = other.transform.parent.GetComponent<GuardAI>();
+            EnemyPatrol patrol = other.transform.parent.GetComponent<EnemyPatrol>();
 
             if (guardAI != null)
             {
                 guardAI.playerInSightRange = true;
             }
 
-            suspicionTimer -= Time.deltaTime;
-            if (suspicionTimer <= 0 && suspicionLevelMax == false)
+            if (patrol.canSeePlayer == true)
             {
-                suspicionLevel.transform.localScale = new Vector3(transform.transform.localScale.x, suspicionLevelProgress , transform.transform.localScale.z);
-                suspicionLevelProgress += 1.5f;
-                //if(suspicionLevelProgress > 135f)
-                //{
-                //    StartCoroutine(Alarm());
-                //    suspicionLevelMax = true;
-                //    IntruderAlarm.Play();
-                //}
+                suspicionTimer -= Time.deltaTime;
+                if (suspicionTimer <= 0 && suspicionLevelMax == false)
+                {
+                    suspicionLevel.transform.localScale = new Vector3(transform.transform.localScale.x, suspicionLevelProgress, transform.transform.localScale.z);
+                    suspicionLevelProgress += 1.5f;
+                    //if(suspicionLevelProgress > 135f)
+                    //{
+                    //    StartCoroutine(Alarm());
+                    //    suspicionLevelMax = true;
+                    //    IntruderAlarm.Play();
+                    //}
+                }
             }
+            
         }
         if(other.tag == "CameraSight")
         {

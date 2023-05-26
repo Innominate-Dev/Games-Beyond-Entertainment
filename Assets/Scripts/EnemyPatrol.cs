@@ -12,14 +12,19 @@ public class EnemyPatrol : MonoBehaviour
     public float timeCount;
     Vector3 destination;
     bool changingDirection = false;
-    bool canSeePlayer = false;
+    public bool canSeePlayer = false;
 
     float DistanceRay;
+    public Transform guard;
+
+    //Animation
+    Animator myAnim;
 
     // Start is called before the first frame update
     void Start()
     {
         destination = waypoints[index].transform.position;
+        myAnim = GetComponentInChildren<Animator>();
     }
 
     // Update is called once per frame
@@ -32,8 +37,7 @@ public class EnemyPatrol : MonoBehaviour
 
         Vector3 forward = transform.TransformDirection(Vector3.forward * 10f);
 
-
-        Physics.Raycast(transform.position,forward, out hit);
+        Physics.Raycast(transform.position,forward, out hit, Mathf.Infinity);
 
         Debug.DrawRay(transform.position, forward, Color.red);
 
@@ -81,6 +85,7 @@ public class EnemyPatrol : MonoBehaviour
             //transform.LookAt(waypoints[index].transform.position);
             if (Vector3.Dot(transform.forward, targetRotation) > 0.95f)
             {
+                myAnim.SetBool("isMoving", true);
                 changingDirection = false;
             }
         }
@@ -91,5 +96,6 @@ public class EnemyPatrol : MonoBehaviour
         index++;
         destination = waypoints[index].transform.position;
         changingDirection = true;
+        myAnim.SetBool("isMoving", false);
     }
 }
