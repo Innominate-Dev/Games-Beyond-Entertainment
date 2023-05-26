@@ -29,14 +29,20 @@ public class EnemyPatrol : MonoBehaviour
         Debug.Log(distance);
 
         RaycastHit hit;
-        Physics.Raycast(transform.position, transform.forward * DistanceRay, out hit);
 
-        Debug.DrawRay(transform.position, transform.forward);
+        Vector3 forward = transform.TransformDirection(Vector3.forward * 10f);
+
+
+        Physics.Raycast(transform.position,forward, out hit);
+
+        Debug.DrawRay(transform.position, forward, Color.red);
 
         if (hit.collider.tag == "Player")
         {
             canSeePlayer = true;
-        } else
+            Debug.Log("FOUND PLAYER!!!");
+        }
+        else
         {
             canSeePlayer = false;
         }
