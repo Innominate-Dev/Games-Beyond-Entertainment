@@ -142,6 +142,8 @@ public class Interactable : MonoBehaviour
     IEnumerator WinningScene()
     {
         yield return new WaitForSeconds(5f);
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
         UnityEngine.SceneManagement.SceneManager.LoadScene("WinScene");
     }
 
